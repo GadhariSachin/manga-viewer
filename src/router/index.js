@@ -4,11 +4,26 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 const routes = [
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  // }
+  {
+    path: "/book/:id/",
+    name: "BooksDetail",
+    props: true,
+    component: () =>
+      import(
+        /* webpackChunkName: "BooksDetail" */ "@/components/BooksDetailComponent.vue"
+      ),
+    children: [
+      {
+        path: "chapter/:chapterId",
+        name: "ChapterDetail",
+        props: true,
+        component: () =>
+          import(
+            /* webpackChunkName: "BooksChapter" */ "@/components/BooksChapterComponent.vue"
+          ),
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({

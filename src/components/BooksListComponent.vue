@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-xs class="d-flex">
-    <v-card class="mx-auto" width="500">
+    <v-card v-if="bookslistLoader" class="mx-auto" width="600">
       <v-card-title primary-title> Manga </v-card-title>
       <v-card-text>
         <v-row>
@@ -13,31 +13,35 @@
               <v-skeleton-loader type="button"></v-skeleton-loader>
             </div>
 
-            <div
-              class="actions--card v-skeleton-loader v-skeleton-loader--boilerplate v-skeleton-loader--is-loading theme--light elevation-2 mb-6"
-            >
-              <v-skeleton-loader type="button"></v-skeleton-loader>
-              <v-skeleton-loader type="button"></v-skeleton-loader>
-              <v-skeleton-loader type="button"></v-skeleton-loader>
-            </div>
+            <BooksDetail />
           </v-col>
 
           <v-col cols="12">
-            <v-img
-              :src="bookslistLoader"
-              :lazy-src="bookslistLoader"
-              aspect-ratio="1"
-              class="grey lighten-2 profile--img"
-            >
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular
-                    indeterminate
-                    color="grey lighten-5"
-                  ></v-progress-circular>
-                </v-row>
-              </template>
-            </v-img>
+            <BooksChapter />
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+    <v-card v-else class="mx-auto" width="600">
+      <v-card-title primary-title> Manga </v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col cols="12">
+            <div class="d-flex justify-space-around">
+              <v-btn
+                v-for="book in bookslist"
+                :key="book.id"
+                light
+                :to="{ name: 'BooksDetail', params: { id: book.id } }"
+              >
+                {{ book.title }}
+              </v-btn>
+            </div>
+            <BooksDetail :key="$route.params" />
+          </v-col>
+
+          <v-col cols="12">
+            <BooksChapter />
           </v-col>
         </v-row>
       </v-card-text>
@@ -56,9 +60,13 @@ export default {
       elevation: 2,
     },
   }),
+  components: {
+    BooksChapter: () => import("./BooksChapterComponent"),
+    BooksDetail: () => import("./BooksDetailComponent"),
+  },
   computed: {
     bookslist() {
-      return this.$store.state.bookslist.items[0];
+      return this.$store.state.bookslist;
     },
     bookslistLoader() {
       return this.$store.state.bookslistLoader;
