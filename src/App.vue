@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <v-main>
-      <h1>New Vue Proj</h1>
+      <v-container grid-list-xs>
+        <BooksList />
+      </v-container>
     </v-main>
   </v-app>
 </template>
@@ -10,7 +12,9 @@
 export default {
   name: "App",
 
-  components: {},
+  components: {
+    BooksList: () => import("@/components/BooksListComponent.vue"),
+  },
 
   data: () => ({
     //
